@@ -8,36 +8,38 @@
   </head>
 </head>
 <body>
-    <h1>Masukkan Interval</h1>
-    <br>
-    <div class="form">
-        <form method="POST">
-            <label>Fungsi (gunakan x, contoh: x**2 + x**3 - 4*x + 2):</label><br>
-            <input type="text" name="fungsi", value="{{fungsi | default("")}}"><br><br>
+    <div class="bg-">
+            <h1>Masukkan Interval</h1>
+        <br>
+        <div class="form">
+            <form method="POST">
+                <label>Fungsi (gunakan x, contoh: x**2 + x**3 - 4*x + 2):</label><br>
+                <input type="text" name="fungsi", value="{{fungsi | default("")}}"><br><br>
 
-            <label>Batas bawah (a):</label><br>
-            <input type="number" step="any" name="a", value="{{a | default("")}}"><br><br>
+                <label>Batas bawah (a):</label><br>
+                <input type="number" step="any" name="a", value="{{a | default("")}}"><br><br>
 
-            <label>Batas atas (b):</label><br>
-            <input type="number" step="any" name="b", value="{{b | default("")}}"><br><br>
+                <label>Batas atas (b):</label><br>
+                <input type="number" step="any" name="b", value="{{b | default("")}}"><br><br>
 
-            <label>Pertidaksamaan:</label><br>
-            <select name="operator">
-                <option value="=" {% if operator == "=" %}selected{% endif %}>=</option>
-                <option value="<=" {% if operator == "=" %}selected{% endif %}> &le; </option>
-                <option value=">=" {% if operator == "=" %}selected{% endif %}> &ge; </option>
-            </select>
-            <br>
-            <br>
-            <br>
-            <button type="submit">Hitung</button>
-        </form>
-    </div>
-    <br>
-    <div class="hasil">
-        {% if hasil is not none%}
-        <h1> Hasil : {{hasil}} </h1>
-        {% endif %}
+                <label>Pertidaksamaan:</label><br>
+                <select name="operator">
+                    <option value="=" {% if operator == "=" %}selected{% endif %}>=</option>
+                    <option value="<=" {% if operator == "=" %}selected{% endif %}> &le; </option>
+                    <option value=">=" {% if operator == "=" %}selected{% endif %}> &ge; </option>
+                </select>
+                <br>
+                <br>
+                <br>
+                <button class ="bg-blue-600 hover:bg-blue-800 focus:outline-2 focus:outline-offset-2 focus:outline-blue-500 active:bg-blue-700 px-4 py-2 rounded-lg" type="submit">Hitung</button>
+            </form>
+        </div>
+        <br>
+        <div class="hasil">
+            {% if hasil is not none%}
+            <h1> Hasil : {{hasil}} </h1>
+            {% endif %}
+        </div>
     </div>
 </body>
 </html>
