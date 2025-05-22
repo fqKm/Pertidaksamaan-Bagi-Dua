@@ -5,14 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pertidaksamaan Bagi Dua</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  </head>
+    <style>
+   
+    </style>
 </head>
-<body>
+<body class="min-h-screen flex items-center justify-center bg-gray-500">
     <div class="bg-">
             <h1>Masukkan Interval</h1>
         <br>
         <div class="form">
-            <form method="POST">
+            <form method="POST">K
                 <label>Fungsi (gunakan x, contoh: x**2 + x**3 - 4*x + 2):</label><br>
                 <input type="text" name="fungsi", value="{{fungsi | default("")}}"><br><br>
 
@@ -23,11 +25,14 @@
                 <input type="number" step="any" name="b", value="{{b | default("")}}"><br><br>
 
                 <label>Pertidaksamaan:</label><br>
-                <select name="operator">
-                    <option value="=" {% if operator == "=" %}selected{% endif %}>=</option>
-                    <option value="<=" {% if operator == "=" %}selected{% endif %}> &le; </option>
-                    <option value=">=" {% if operator == "=" %}selected{% endif %}> &ge; </option>
-                </select>
+                <!-- Tambahkan hidden input untuk menyimpan pilihan operator -->
+                <input type="hidden" name="operator" id="operator-input" value="{{ operator | default('=') }}">
+
+                <div class="flex gap-2 mt-2">
+                <button class ="bg-blue-600 hover:bg-blue-800 focus:outline-2 focus:outline-offset-2 focus:outline-blue-500 active:bg-blue-700 px-4 py-2 rounded-lg" type="button" onclick="selectOperator('=')" class="operator-btn px-4 py-2 rounded border {% if operator == '=' %}bg-blue-500 text-white{% else %}bg-gray-200{% endif %}">=</button>
+                <button class ="bg-blue-600 hover:bg-blue-800 focus:outline-2 focus:outline-offset-2 focus:outline-blue-500 active:bg-blue-700 px-4 py-2 rounded-lg" type="button" onclick="selectOperator('<')" class="operator-btn px-4 py-2 rounded border {% if operator == '<=' %}bg-blue-500 text-white{% else %}bg-gray-200{% endif %}">&le;</button>
+                <button class ="bg-blue-600 hover:bg-blue-800 focus:outline-2 focus:outline-offset-2 focus:outline-blue-500 active:bg-blue-700 px-4 py-2 rounded-lg"type="button" onclick="selectOperator('>=')" class="operator-btn px-4 py-2 rounded border {% if operator == '>=' %}bg-blue-500 text-white{% else %}bg-gray-200{% endif %}">&ge;</button>
+                </div>
                 <br>
                 <br>
                 <br>
