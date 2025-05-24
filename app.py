@@ -6,7 +6,7 @@ app = Flask(__name__)
 @app.get("/")
 def index():
     return render_template("bagidua.html", hasil=None, table=None)
-
+  
 @app.post("/")
 def bagidua():
     hasil = None
