@@ -26,10 +26,16 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        /* Added for axis labels */
+        .axis-label-x {
+            text-anchor: middle;
+        }
+        .axis-label-y {
+            text-anchor: end;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-    <!-- Header -->
     <div class="bg-white shadow-sm border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 py-6">
             <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -42,8 +48,7 @@
 
     <div class="max-w-7xl mx-auto px-4 py-8">
         <div class="grid grid-cols-1 xl:grid-cols-5 gap-8">
-            <!-- Input Form Section -->
-            <div class="xl:col-span-2">
+            <div class="xl:col-span-2 space-y-8">
                 <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                     <div class="bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-4">
                         <h2 class="text-xl font-semibold text-white flex items-center">
@@ -56,7 +61,6 @@
                     
                     <div class="p-6">
                         <form method="POST" class="space-y-6">
-                            <!-- Function Input -->
                             <div class="space-y-2">
                                 <label class="block text-sm font-semibold text-gray-700">
                                     Fungsi Matematika
@@ -72,10 +76,9 @@
                                         </svg>
                                     </div>
                                 </div>
-                                <p class="text-xs text-gray-500">Gunakan syntax Python: x**2 untuk x², * untuk perkalian</p>
+                                <p class="text-xs text-gray-500">Gunakan syntax Python: x**2 untuk x², * untuk perkalian. Gunakan 'math.sin', 'math.cos', 'math.exp' untuk fungsi trigonometri/eksponensial.</p>
                             </div>
 
-                            <!-- Interval Inputs -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="space-y-2">
                                     <label class="block text-sm font-semibold text-gray-700">Batas Bawah (a)</label>
@@ -91,7 +94,6 @@
                                 </div>
                             </div>
 
-                            <!-- Operator Selection -->
                             <div class="space-y-3">
                                 <label class="block text-sm font-semibold text-gray-700">Jenis Persamaan</label>
                                 <input type="hidden" name="operator" id="operator-input" value="{{ operator if operator else '=' }}">
@@ -102,14 +104,13 @@
                                             data-operator="=">f(x) = 0</button>
                                     <button type="button" onclick="selectOperator('<=')" 
                                             class="operator-btn flex-1 py-3 px-4 rounded-xl border-2 font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg" 
-                                            data-operator="<=">f(x) ≤ 0</button>
+                                            data-operator="<=">f(x) &le; 0</button>
                                     <button type="button" onclick="selectOperator('>=')" 
                                             class="operator-btn flex-1 py-3 px-4 rounded-xl border-2 font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg" 
-                                            data-operator=">=">f(x) ≥ 0</button>
+                                            data-operator=">=">f(x) &ge; 0</button>
                                 </div>
                             </div>
 
-                            <!-- Submit Button -->
                             <button type="submit" 
                                     class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 hover:shadow-xl flex items-center justify-center space-x-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -119,7 +120,6 @@
                             </button>
                         </form>
 
-                        <!-- Results Section -->
                         {% if hasil %}
                         <div class="mt-6 animate-fade-in">
                             <div class="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-6">
@@ -139,9 +139,35 @@
                         {% endif %}
                     </div>
                 </div>
+
+                <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+                    <div class="bg-gradient-to-r from-indigo-500 to-blue-600 px-6 py-4">
+                        <h2 class="text-xl font-semibold text-white flex items-center">
+                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            Diagram Fungsi
+                        </h2>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div id="function-plot" class="bg-gray-50 rounded-xl border-2 border-gray-200 h-80 flex items-center justify-center">
+                            <div class="text-center">
+                                <svg class="mx-auto h-16 w-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <p class="text-gray-500 text-sm">Masukkan fungsi untuk melihat grafik</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <button onclick="plotFunction()" class="bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 transform hover:scale-105">
+                                <span>Plot Fungsi</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Iteration Table Section -->
             <div class="xl:col-span-3">
                 <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden h-fit">
                     <div class="bg-gradient-to-r from-purple-500 to-pink-600 px-6 py-4">
@@ -197,7 +223,6 @@
                             </div>
                         </div>
                         
-                        <!-- Summary Stats -->
                         <div class="mt-6 grid grid-cols-3 gap-4">
                             <div class="bg-blue-50 rounded-lg p-4 text-center">
                                 <div class="text-2xl font-bold text-blue-600">{{ table|length }}</div>
@@ -217,7 +242,7 @@
                     <div class="p-12">
                         <div class="text-center">
                             <svg class="mx-auto h-24 w-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2-2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                             </svg>
                             <h3 class="mt-6 text-lg font-semibold text-gray-600">Tabel Iterasi Kosong</h3>
                             <p class="mt-2 text-gray-500">Masukkan fungsi dan interval, lalu klik "Hitung Akar" untuk melihat proses iterasi</p>
@@ -226,7 +251,7 @@
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
-                                    Pastikan f(a) × f(b) &lt; 0
+                                    Pastikan f(a) &times; f(b) &lt; 0
                                 </div>
                             </div>
                         </div>
@@ -271,6 +296,279 @@
                 Menghitung...
             `;
             submitBtn.disabled = true;
+        });
+
+        // Function plotting functionality
+        function evaluateFunction(funcString, x) {
+            // This is a simplified and potentially unsafe eval. For production, consider a safer math expression parser.
+            // Using a 'with' statement for Math allows direct access to Math properties like sin, cos, PI
+            // without needing 'Math.' prefix, similar to Python's 'from math import *'
+            const M = Math;
+            try {
+                return eval(funcString.replace(/x/g, `(${x})`).replace(/pi/g, `Math.PI`));
+            } catch (error) {
+                console.error("Error evaluating function:", error);
+                throw new Error("Invalid function syntax or unsupported operation.");
+            }
+        }
+
+        function plotFunction() {
+            const funcInput = document.querySelector('input[name="fungsi"]').value;
+            const aValue = parseFloat(document.querySelector('input[name="a"]').value);
+            const bValue = parseFloat(document.querySelector('input[name="b"]').value);
+            
+            const plotDiv = document.getElementById('function-plot');
+            plotDiv.innerHTML = ''; // Clear previous content
+
+            if (!funcInput) {
+                plotDiv.innerHTML = `
+                    <div class="text-center">
+                        <svg class="mx-auto h-16 w-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <p class="text-gray-500 text-sm">Masukkan fungsi untuk melihat grafik</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.id = 'plot-canvas';
+                canvas.width = plotDiv.clientWidth; // Use full width of container
+                canvas.height = 300;
+                plotDiv.appendChild(canvas);
+                
+                const ctx = canvas.getContext('2d');
+                
+                // Set up coordinate system
+                const margin = 40;
+                const plotWidth = canvas.width - 2 * margin;
+                const plotHeight = canvas.height - 2 * margin;
+                
+                // Determine plot range
+                // Default x range if a or b are not provided or invalid
+                const minX = isNaN(aValue) ? -5 : aValue - Math.abs(aValue * 0.1) - 1; // Expand range slightly
+                const maxX = isNaN(bValue) ? 5 : bValue + Math.abs(bValue * 0.1) + 1;
+                const xMin = Math.min(minX, -10);
+                const xMax = Math.max(maxX, 10);
+                const xRange = xMax - xMin;
+                
+                // Sample function to determine y range
+                const samplePoints = 200; // Increased sample points for smoother curve
+                const yValues = [];
+                const plotPoints = []; // Store x, y pairs for plotting
+
+                for (let i = 0; i <= samplePoints; i++) {
+                    const x = xMin + (i / samplePoints) * xRange;
+                    try {
+                        let y = evaluateFunction(funcInput, x);
+                        if (isFinite(y)) {
+                            yValues.push(y);
+                            plotPoints.push({x: x, y: y});
+                        }
+                    } catch (e) {
+                        // Skip invalid points (e.g., division by zero, log of negative)
+                        // console.warn(`Skipping point at x=${x} due to error: ${e.message}`);
+                    }
+                }
+                
+                if (yValues.length === 0) {
+                    throw new Error('Tidak dapat menghitung nilai fungsi pada interval ini. Periksa fungsi atau interval.');
+                }
+                
+                // Determine yMin and yMax based on sampled values, with padding
+                let yMin = Math.min(...yValues);
+                let yMax = Math.max(...yValues);
+
+                // Add padding to y-axis
+                const yPadding = (yMax - yMin) * 0.1; // 10% padding
+                yMin -= yPadding;
+                yMax += yPadding;
+
+                if (yMin === yMax) { // Handle case where function is constant
+                    yMin -= 1;
+                    yMax += 1;
+                }
+
+                const yRange = yMax - yMin;
+                
+                // Drawing functions
+                function xToCanvas(x) {
+                    return margin + ((x - xMin) / xRange) * plotWidth;
+                }
+                
+                function yToCanvas(y) {
+                    return margin + plotHeight - ((y - yMin) / yRange) * plotHeight;
+                }
+                
+                // Draw grid
+                ctx.strokeStyle = '#e5e7eb'; // Gray-200
+                ctx.lineWidth = 1;
+                
+                // Vertical grid lines
+                // Draw grid lines at sensible intervals
+                let xStep = 1;
+                if (xRange > 20) xStep = 5;
+                if (xRange > 50) xStep = 10;
+                if (xRange < 2) xStep = 0.5;
+
+                for (let x = Math.ceil(xMin / xStep) * xStep; x <= xMax; x += xStep) {
+                    const canvasX = xToCanvas(x);
+                    ctx.beginPath();
+                    ctx.moveTo(canvasX, margin);
+                    ctx.lineTo(canvasX, margin + plotHeight);
+                    ctx.stroke();
+                }
+                
+                // Horizontal grid lines
+                let yStep = 1;
+                if (yRange > 20) yStep = 5;
+                if (yRange > 50) yStep = 10;
+                if (yRange < 2) yStep = 0.5;
+                
+                for (let y = Math.ceil(yMin / yStep) * yStep; y <= yMax; y += yStep) {
+                    const canvasY = yToCanvas(y);
+                    ctx.beginPath();
+                    ctx.moveTo(margin, canvasY);
+                    ctx.lineTo(margin + plotWidth, canvasY);
+                    ctx.stroke();
+                }
+                
+                // Draw axes
+                ctx.strokeStyle = '#6b7280'; // Gray-500
+                ctx.lineWidth = 2;
+
+                // X-axis
+                const xAxisY = yToCanvas(0);
+                if (xAxisY >= margin && xAxisY <= margin + plotHeight) {
+                    ctx.beginPath();
+                    ctx.moveTo(margin, xAxisY);
+                    ctx.lineTo(margin + plotWidth, xAxisY);
+                    ctx.stroke();
+                }
+                
+                // Y-axis
+                const yAxisX = xToCanvas(0);
+                if (yAxisX >= margin && yAxisX <= margin + plotWidth) {
+                    ctx.beginPath();
+                    ctx.moveTo(yAxisX, margin);
+                    ctx.lineTo(yAxisX, margin + plotHeight);
+                    ctx.stroke();
+                }
+
+                // Draw axis labels
+                ctx.fillStyle = '#4b5563'; // Gray-700
+                ctx.font = '12px sans-serif';
+
+                // X-axis labels
+                for (let x = Math.ceil(xMin / xStep) * xStep; x <= xMax; x += xStep) {
+                    if (Math.abs(x) < 1e-9 && (xAxisY >= margin && xAxisY <= margin + plotHeight)) continue; // Avoid duplicating '0' at origin
+                    const canvasX = xToCanvas(x);
+                    ctx.fillText(x.toFixed(xStep < 1 ? 1 : 0), canvasX, (xAxisY < margin ? margin - 5 : (xAxisY > margin + plotHeight ? margin + plotHeight + 15 : xAxisY + 15)));
+                }
+
+                // Y-axis labels
+                for (let y = Math.ceil(yMin / yStep) * yStep; y <= yMax; y += yStep) {
+                    if (Math.abs(y) < 1e-9 && (yAxisX >= margin && yAxisX <= margin + plotWidth)) continue; // Avoid duplicating '0' at origin
+                    const canvasY = yToCanvas(y);
+                    ctx.fillText(y.toFixed(yStep < 1 ? 1 : 0), (yAxisX < margin ? margin + 5 : (yAxisX > margin + plotWidth ? margin + plotWidth - 15 : yAxisX - 5)), canvasY + 4); // +4 for vertical centering
+                }
+
+                // Draw the function curve
+                ctx.strokeStyle = '#8b5cf6'; // Purple-500
+                ctx.lineWidth = 3;
+                ctx.lineJoin = 'round'; // Smooths out lines at sharp corners
+
+                ctx.beginPath();
+                let firstPoint = true;
+                for (const point of plotPoints) {
+                    const canvasX = xToCanvas(point.x);
+                    const canvasY = yToCanvas(point.y);
+
+                    // Only draw if point is within canvas bounds (vertically)
+                    if (canvasY >= margin && canvasY <= margin + plotHeight) {
+                        if (firstPoint) {
+                            ctx.moveTo(canvasX, canvasY);
+                            firstPoint = false;
+                        } else {
+                            ctx.lineTo(canvasX, canvasY);
+                        }
+                    } else if (!firstPoint) {
+                        // If segment goes out of bounds, restart path after
+                        ctx.stroke();
+                        ctx.beginPath();
+                        firstPoint = true;
+                    }
+                }
+                ctx.stroke();
+
+                // Draw initial interval (a, b)
+                if (!isNaN(aValue)) {
+                    ctx.strokeStyle = '#ef4444'; // Red-500
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(xToCanvas(aValue), margin);
+                    ctx.lineTo(xToCanvas(aValue), margin + plotHeight);
+                    ctx.stroke();
+                    ctx.fillStyle = '#ef4444';
+                    ctx.fillText('a', xToCanvas(aValue) - 5, margin - 15);
+                }
+                if (!isNaN(bValue)) {
+                    ctx.strokeStyle = '#22c55e'; // Green-500
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(xToCanvas(bValue), margin);
+                    ctx.lineTo(xToCanvas(bValue), margin + plotHeight);
+                    ctx.stroke();
+                    ctx.fillStyle = '#22c55e';
+                    ctx.fillText('b', xToCanvas(bValue) + 5, margin - 15);
+                }
+
+                // Draw the final root if available (passed from Flask to JS via hidden input or global var)
+                const finalRootInput = document.querySelector('.bg-green-50 .text-2xl.font-bold.text-green-600');
+                if (finalRootInput) {
+                    const finalRootText = finalRootInput.textContent;
+                    try {
+                        const finalRoot = parseFloat(finalRootText);
+                        if (!isNaN(finalRoot)) {
+                            const rootCanvasX = xToCanvas(finalRoot);
+                            const rootCanvasY = yToCanvas(evaluateFunction(funcInput, finalRoot));
+                            
+                            ctx.fillStyle = '#0f766e'; // Teal-700
+                            ctx.beginPath();
+                            ctx.arc(rootCanvasX, rootCanvasY, 5, 0, 2 * Math.PI);
+                            ctx.fill();
+
+                            ctx.font = '12px sans-serif';
+                            ctx.fillText(`Root: ${finalRoot.toFixed(3)}`, rootCanvasX + 10, rootCanvasY - 10);
+                        }
+                    } catch (e) {
+                        console.warn("Could not parse final root for plotting:", e);
+                    }
+                }
+
+
+            } catch (e) {
+                plotDiv.innerHTML = `
+                    <div class="text-center p-4 text-red-600">
+                        <svg class="mx-auto h-16 w-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <p class="text-sm font-semibold">Error saat memplot fungsi:</p>
+                        <p class="text-sm">${e.message}</p>
+                        <p class="mt-2 text-xs text-gray-500">Pastikan fungsi valid dan interval tidak terlalu ekstrem.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Call plotFunction initially if data is present (e.g., after a form submission)
+        document.addEventListener('DOMContentLoaded', () => {
+            const fungsiInput = document.querySelector('input[name="fungsi"]');
+            if (fungsiInput && fungsiInput.value) {
+                plotFunction();
+            }
         });
     </script>
 </body>
